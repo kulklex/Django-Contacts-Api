@@ -2,13 +2,16 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Contact
 from .serializers import ContactSerializer
-from rest_framework import permissions
+from rest_framework import permissions,authentication
+from authentication.backends import JWTAuthentication
 
 
 # Create your views here.
 class ContactList(ListCreateAPIView):
     
     serializer_class = ContactSerializer
+    authentication_classes=[authentication.TokenAuthentication] 
+    
     permission_classes = (permissions.IsAuthenticated,)
     
     def perform_create(self, serializer):
@@ -21,6 +24,7 @@ class ContactList(ListCreateAPIView):
 class ContactDetailView(RetrieveUpdateDestroyAPIView):
     
     serializer_class = ContactSerializer
+    authentication_classes=[authentication.TokenAuthentication] 
     permission_classes = (permissions.IsAuthenticated,)
     lookup_field = "id"
         

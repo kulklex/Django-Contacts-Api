@@ -6,6 +6,7 @@ from rest_framework import status
 from django.conf import settings
 from django.contrib import auth
 import jwt
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class RegisterView(GenericAPIView):
@@ -22,7 +23,6 @@ class RegisterView(GenericAPIView):
 
 class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
-    
     def post(self,request):
         data = request.data
         username = data.get('username', '')
@@ -30,10 +30,10 @@ class LoginView(GenericAPIView):
         user = auth.authenticate(username=username, password=password)
         
         if user:
-            auth_token = jwt.encode({'username': user.username}, settings.JWT_SECRET_KEY, algorithm="HS256")
+            auth_token = Token.objects.get(user=user)
             
             serializer = UserSerializer(user)
-            data = {'user': serializer.data, 'token': auth_token}
+            data = {'user': serializer.data, 'token': auth_token.key}
             return Response(data, status=status.HTTP_200_OK)
             
             

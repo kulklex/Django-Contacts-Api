@@ -10,7 +10,9 @@ class JWTAuthentication(authentication.BaseAuthentication):
         auth_data = authentication.get_authorization_header(request)
         
         if not auth_data: return None
-        prefix,token = auth_data.decode('utf-8').split(' ')
+        print(auth_data.decode('utf-8')[7:])
+        token = auth_data.decode('utf-8')[7:]
+        
         
         try:
             payload = jwt.decode(token, settings.JWT_SECRET_KEY)
