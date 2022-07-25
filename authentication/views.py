@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from .serializers import UserSerializer
+from .serializers import LoginSerializer, UserSerializer
 from rest_framework import status
 from django.conf import settings
 from django.contrib import auth
@@ -21,7 +21,7 @@ class RegisterView(GenericAPIView):
 
 
 class LoginView(GenericAPIView):
-    serializer_class = UserSerializer
+    serializer_class = LoginSerializer
     
     def post(self,request):
         data = request.data
